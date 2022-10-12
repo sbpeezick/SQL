@@ -1,0 +1,28 @@
+#In this SQL I have a very simple project from the Khan Academy SQL basics course.
+
+#Creating a table for fake clothing store and inserting values.
+CREATE TABLE inventory (id integer primary key, item text, price integer, color text, size text, stock integer);
+
+INSERT INTO inventory VALUES 
+(1, 'tshirt', 10, 'green', 'M', 20),
+(2, 'colaredshirt', 20, 'blue', 'L', 15),
+(3, 'tanktop', 8, 'white', 'S', 10),
+(4, 'turtleneck', 15, 'grey', 'M', 30),
+(5, 'longsleave', 18, 'red', 'L', 7),
+(6, 'buttonup', 25, 'black', 'XS', 12),
+(7, 'jeans', 30, 'blue', 'M', 22),
+(8, 'slacks', 25, 'kacki', 'XL',14),
+(9, 'shorts', 23, 'pinstripe', 'M', 36),
+(10, 'skirts', 26, 'hazel', 'S', 12),
+(11, 'scarf', 13, 'pink', 'L', 16),
+(12, 'hat', 11, 'green', 'M', 45),
+(13, 'boots', 55, 'brown', 'L', 36),
+(15, 'sock', 5, 'purple', 'S', 65)
+;
+
+#Some simple statistics from the data. Average price, total stock, and total stock of items by color.
+SELECT * FROM inventory ORDER BY price;
+SELECT avg(price) FROM inventory;
+SELECT sum(stock) FROM inventory;
+SELECT color, sum(stock) FROM inventory GROUP BY color;
+
