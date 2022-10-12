@@ -1,2 +1,2 @@
-# SQL
-SQL Portfolio
+# Sean Peezick's SQL Portfolio
+
