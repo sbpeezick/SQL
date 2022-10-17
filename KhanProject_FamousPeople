@@ -1,0 +1,59 @@
+/* Create table about the people and what they do here */
+
+CREATE TABLE politician (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fullname TEXT,
+    age INTEGER);
+    
+INSERT INTO politician (fullname, age) VALUES ("joe Biden", 79);
+INSERT INTO politician (fullname, age) VALUES ("Bernie Sanders", 79 );
+INSERT INTO politician (fullname, age) VALUES ("Mitch McConnell", 78 );
+INSERT INTO politician (fullname, age) VALUES ("Dianne Feinstein", 87);
+INSERT INTO politician (fullname, age) VALUES ("Mitt Romney", 73);
+INSERT INTO politician (fullname, age) VALUES ("Nancy Pelosi", 80);
+INSERT INTO politician (fullname, age) VALUES ("Hal Rogers", 83);
+INSERT INTO politician (fullname, age) VALUES ("John Curtis", 60);
+INSERT INTO politician (fullname, age) VALUES
+("Peter Welch", 61);
+INSERT INTO politician (fullname, age) VALUES ("Kamala Harris", 57);
+SELECT * FROM politician;
+
+CREATE TABLE jobs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person_id INTEGER,
+    role TEXT,
+    state TEXT,
+    party TEXT);
+    
+INSERT INTO jobs (person_id, role, party) VALUES (1, "President", "Dem");
+INSERT INTO jobs (person_id, role, state, party) VALUES (1, "Senator", "DE", "Dem");
+INSERT INTO jobs (person_id, role, state, party) VALUES (2, "Senator", "VT", "Ind");
+INSERT INTO jobs (person_id, role, state, party) VALUES (3, "Senator", "KY", "Rep");
+INSERT INTO jobs (person_id, role, state, party) VALUES (4, "Senator", "CA", "Dem");
+INSERT INTO jobs (person_id, role, state, party) VALUES (5, "Senator", "UT", "Rep");
+INSERT INTO jobs (person_id, role, state, party) VALUES (6, "House", "CA", "Dem");
+INSERT INTO jobs (person_id, role, state, party) VALUES (7, "House", "KY", "Rep");
+INSERT INTO jobs (person_id, role, state, party) VALUES (8, "House", "UT", "Rep");
+INSERT INTO jobs (person_id, role, state, party)
+VALUES (9, "House", "VT", "Dem");
+INSERT INTO jobs (person_id, role, party) 
+VALUES (10, "Vice President", "Dem");
+INSERT INTO jobs (person_id, role, state, party) VALUES (10, "Senator", "CA", "Dem");
+SELECT * FROM jobs;
+
+/*Selecting all politicians in the Democratic party*/
+
+SELECT p.fullname, j.role, j.party
+FROM politician p
+JOIN jobs j
+ON p.id=j.person_id
+Where j.party="Dem";
+
+/*Selecting all senators older than 70*/
+
+SELECT p.fullname, j.role, p.age
+FROM politician p
+JOIN jobs j
+ON p.id=j.person_id
+WHERE p.age>70
+ORDER BY p.age desc;
