@@ -1,0 +1,116 @@
+/*Final SQL Project working with database that had 11 tables related to customers purchasing music. The database included a series of tables related to the music such as artists, albums, and tracks as well as tables related to invoices, customers, and employees. 
+
+--Show Customers (their full names, customer ID, and country) who are not in the US.
+
+SELECT FirstName, LastName, CustomerId, Country
+FROM customers
+WHERE Country != "USA";
+
+--Show only the Customers from Brazil.
+SELECT FirstName, LastName, CustomerId, Country
+FROM customers
+WHERE Country = "Brazil";
+
+--Find the Invoices of customers who are from Brazil. The resulting table should show the customer's full name, Invoice ID, Date of the invoice, and billing country.
+SELECT c.FirstName, c.LastName, i.InvoiceID, i.InvoiceDate, i.BillingCountry
+FROM customers c
+LEFT JOIN invoices i
+ON c.CustomerID=i.CustomerId
+WHERE Country = "Brazil";
+
+--Show the Employees who are Sales Agents.
+SELECT EmployeeId, FirstName, LastName, Title
+FROM employees
+WHERE Title LIKE "Sales Support Agent";
+
+--Find a unique/distinct list of billing countries from the Invoice table.
+SELECT distinct BillingCountry
+FROM invoices;
+
+--Shows the invoices associated with each sales agent. The resulting table should include the Sales Agent's full name.
+SELECT FirstName, LastName, InvoiceId
+FROM employees em
+JOIN customers cust
+ON em.EmployeeId=cust.SupportRepId
+JOIN invoices inv
+ON cust.CustomerID=inv.CustomerID
+WHERE em.Title="Sales Support Agent";
+
+--Number of invoices per agent
+SELECT FirstName, LastName, COUNT(InvoiceId) as Number_of_Invoices
+FROM employees em
+JOIN customers cust
+ON em.EmployeeId=cust.SupportRepId
+JOIN invoices inv
+ON cust.CustomerID=inv.CustomerID
+WHERE em.Title="Sales Support Agent"
+GROUP BY em.LastName;
+
+--Show the Invoice Total, Customer name, Country, and Sales Agent name for all invoices and customers.
+SELECT cust.FirstName, cust.LastName,cust.Country, inv.Total, em.FirstName, em.LastName
+FROM employees em 
+JOIN Customers cust 
+ON cust.SupportRepId = em.EmployeeId
+JOIN Invoices Inv 
+ON Inv.CustomerId = cust.CustomerId;
+
+--How many Invoices were there in 2009?
+SELECT COUNT(*)
+FROM invoices
+WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+
+--What are the total sales for 2009?
+SELECT ROUND(sum(total),2) as Total_Sales
+FROM invoices
+WHERE InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31';
+
+--Write a query that includes the purchased track name with each invoice line ID.
+SELECT tra.Name, inv.InvoiceLineId
+FROM tracks tra
+JOIN invoice_items inv
+ON tra.TrackId=inv.TrackId;
+
+--Write a query that includes the purchased track name AND artist name with each invoice line ID.
+SELECT art.Name as artist_name, tra.Name as track_name, inv.InvoiceLineId
+FROM invoice_items inv
+LEFT JOIN tracks tra
+ON tra.TrackId=inv.TrackId
+INNER JOIN albums alb
+ON alb.AlbumId=tra.AlbumId
+LEFT JOIN artists art
+ON art.ArtistId=alb.ArtistId;
+
+--Provide a query that shows all the Tracks, and include the Album name, Media type, and Genre.
+SELECT tra.Name as Track_Name, alb.Title as Album_Name, art.Name as Artist_Name, med.Name as Media_type, gen.Name as Genre
+FROM tracks tra
+JOIN albums alb
+ON tra.AlbumId=alb.AlbumId
+JOIN artists art
+ON art.ArtistId=alb.ArtistId
+JOIN media_types med
+ON med.MediaTypeId=tra.MediaTypeID
+JOIN genres gen
+ON gen.GenreId=tra.GenreId;
+
+--Show the total sales made by each sales agent.
+SELECT em.FirstName, em.LastName, round(sum(inv.total),2) as total_sales
+FROM employees em
+JOIN customers cust
+ON em.employeeId=cust.SupportRepId
+JOIN invoices inv
+ON inv.CustomerId=cust.CustomerId
+WHERE em.Title = 'Sales Support Agent' 
+GROUP BY em.FirstName;
+
+--Which sales agent made the most dollars in sales in 2009?
+
+SELECT em.FirstName, em.LastName, round(sum(inv.total),2) as total_sales
+FROM employees em
+JOIN customers cust
+ON em.employeeId=cust.SupportRepId
+JOIN invoices inv
+ON inv.CustomerId=cust.CustomerId
+WHERE em.Title = 'Sales Support Agent' and inv.InvoiceDate BETWEEN '2009-01-01' AND '2009-12-31'
+GROUP BY em.FirstName
+ORDER BY total_sales desc
+LIMIT 1;
